@@ -11,9 +11,6 @@
       "src": "/(.*)",
       "dest": "src/index.js"
     }
-  ],
-  "env": {
-    "GEMINI_API_KEY": "@gemini-api-key",
-    "PORT": "3000"
-  }
+  ]
 }
+
