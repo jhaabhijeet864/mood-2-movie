@@ -90,8 +90,11 @@ document.addEventListener('DOMContentLoaded', () => {
         requestBody.userId = currentUser.uid;
       }
       
+      // Use API_BASE_URL if available (for static hosting) or default to relative path
+      const apiUrl = window.API_BASE_URL ? `${window.API_BASE_URL}/recommend` : '/recommend';
+      
       // Send request to server
-      const response = await fetch('/recommend', {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

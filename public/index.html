@@ -1,89 +1,186 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mood2Movie - Find Movies Based on Your Mood</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <!-- Firebase Hosting Meta -->
+  <meta name="description" content="Find perfect movies based on your current mood using AI">
+  <meta name="keywords" content="movies, mood, recommendation, AI, entertainment">
+</head>
+<body>
+  <div class="min-h-screen bg-slate-50">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+      <!-- Hero Section -->
+      <div class="hero-section">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            <span class="gradient-text">Mood2Movie</span>
+          </h1>
+          <p class="hero-subtitle">Find Movies Based on Your Mood</p>
+          <p class="hero-description">
+            Discover personalized movie recommendations powered by AI that match your current emotional state
+          </p>
+        </div>
+        
+        <!-- Floating mood suggestions -->
+        <div class="mood-suggestions">
+          <span class="mood-tag">Happy</span>
+          <span class="mood-tag">Sad</span>
+          <span class="mood-tag">Excited</span>
+          <span class="mood-tag">Relaxed</span>
+          <span class="mood-tag">Adventurous</span>
+          <span class="mood-tag">Romantic</span>
+        </div>
+      </div>
 
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/12.0.0/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/12.0.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/12.0.0/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/12.0.0/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/12.0.0/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/12.0.0/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/12.0.0/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/12.0.0/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/12.0.0/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/12.0.0/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+      <!-- Authentication Section -->
+      <div id="auth-section" class="auth-section">
+        <!-- User Profile (shown when logged in) -->
+        <div id="user-profile-card" class="user-profile-card" style="display: none;">
+          <div class="user-avatar-container">
+            <img id="user-avatar" class="user-avatar" src="" alt="Profile">
+          </div>
+          <div class="user-info">
+            <p id="user-name" class="user-name"></p>
+            <p id="user-email" class="user-email"></p>
+          </div>
+          <button id="logout-button" class="logout-btn">
+            <i data-lucide="log-out"></i>
+          </button>
+        </div>
+        
+        <!-- Login Card (shown when logged out) -->
+        <div id="login-card" class="login-card">
+          <h2 class="login-title">Sign in to get started</h2>
+          <p class="login-subtitle">
+            Create an account to save your movie recommendations and search history
+          </p>
+          
+          <div class="auth-buttons">
+            <button id="login-google" class="btn-auth btn-google">
+              <svg class="google-icon" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+              Continue with Google
+            </button>
+            <button id="login-github" class="btn-auth btn-github">
+              <i data-lucide="github"></i>
+              Continue with GitHub
+            </button>
+          </div>
+        </div>
+      </div>
 
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+      <!-- Main Content Grid -->
+      <div id="main-grid" class="main-grid" style="display: none;">
+        <div class="content-area">
+          <!-- Mood Input Section -->
+          <div class="mood-input-card">
+            <h2 class="mood-input-title">How are you feeling today?</h2>
+            
+            <form id="mood-form" class="mood-form">
+              <div class="input-wrapper">
+                <input 
+                  type="text" 
+                  id="mood" 
+                  placeholder="Describe your current mood... (e.g., happy, sad, excited, relaxed)"
+                  autocomplete="off"
+                  class="mood-input"
+                >
+                <i data-lucide="search" class="search-icon"></i>
+              </div>
+              
+              <button id="go" type="submit" class="submit-btn">
+                <span class="btn-text">Get Movies</span>
+                <div class="loading-spinner" style="display: none;">
+                  <div class="spinner"></div>
+                  Finding Movies...
+                </div>
+              </button>
+            </form>
+
+            <div class="mood-suggestions-input">
+              <p class="suggestions-label">Try these mood suggestions:</p>
+              <div class="suggestions-grid">
+                <button class="suggestion-btn" data-mood="Happy and energetic">Happy and energetic</button>
+                <button class="suggestion-btn" data-mood="Feeling nostalgic">Feeling nostalgic</button>
+                <button class="suggestion-btn" data-mood="Need a good laugh">Need a good laugh</button>
+                <button class="suggestion-btn" data-mood="Want to cry">Want to cry</button>
+                <button class="suggestion-btn" data-mood="Adventurous mood">Adventurous mood</button>
+                <button class="suggestion-btn" data-mood="Romantic evening">Romantic evening</button>
+                <button class="suggestion-btn" data-mood="Feeling philosophical">Feeling philosophical</button>
+                <button class="suggestion-btn" data-mood="Need motivation">Need motivation</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Movie Results Section -->
+          <div id="movie-results" class="movie-results">
+            <div class="empty-state">
+              <div class="empty-icon">🎬</div>
+              <h3 class="empty-title">No movies found yet</h3>
+              <p class="empty-description">
+                Describe your mood above to get personalized movie recommendations
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- User Profile Sidebar -->
+        <div class="sidebar">
+          <div id="user-profile-sidebar" class="user-profile-sidebar">
+            <!-- Will be populated by JavaScript -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Disabled State for Non-Authenticated Users -->
+      <div id="disabled-state" class="disabled-state">
+        <div class="mood-input-card disabled">
+          <h2 class="mood-input-title">How are you feeling today?</h2>
+          
+          <div class="mood-form">
+            <div class="input-wrapper">
+              <input 
+                type="text" 
+                placeholder="Describe your current mood... (e.g., happy, sad, excited, relaxed)"
+                disabled
+                class="mood-input"
+              >
+              <i data-lucide="search" class="search-icon"></i>
+            </div>
+            
+            <button disabled class="submit-btn">Get Movies</button>
+          </div>
+        </div>
+        <p class="disabled-message">
+          Sign in to get personalized movie recommendations based on your mood
+        </p>
+      </div>
     </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
+  </div>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-        }
-      });
+  <!-- Load Firebase config first -->
+  <script type="module" src="/js/firebase-config.js"></script>
+  <!-- Then load the main script -->
+  <script>
+      // Set API endpoint for static hosting
+      window.API_BASE_URL = 'https://mood2movie-api.vercel.app'; // Will be updated after Vercel deployment
     </script>
-  </body>
+    <script type="module" src="/js/script.js"></script>
+  
+  <!-- Initialize Lucide icons -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
+  </script>
+</body>
 </html>
