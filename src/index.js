@@ -81,15 +81,21 @@ app.post('/recommend', verifyFirebaseToken, async (req, res) => {
   }
 
   try {
-    // Prepare prompt for Gemini
-    let prompt = `Suggest 10 movies for someone who feels ${mood}.`;
+    // Prepare detailed prompt for Gemini
+    let prompt = `Suggest 3-5 movies for someone who feels "${mood}". For each movie, provide:
+    - title: The movie title
+    - year: Release year
+    - genre: Primary genre (e.g., Drama, Comedy, Action, etc.)
+    - rating: IMDb rating if known (e.g., "8.1") or null if unknown
+    - reason: A detailed explanation (2-3 sentences) of why this movie matches their mood and what makes it perfect for this emotional state.
+    
+    Return as JSON array with exactly these fields: title, year, genre, rating, reason.
+    Focus on well-known, critically acclaimed movies that genuinely match the emotional state.`;
     
     // Personalize if user is authenticated
     if (req.user) {
-      prompt += ` The user's name is ${req.user.name || 'a returning user'}. `;
+      prompt += ` The user is a returning viewer who appreciates thoughtful recommendations.`;
     }
-    
-    prompt += " Return JSON array; each item has title, year, reason.";
     
     // Generate recommendations
     const result = await model.generateContent(prompt);
@@ -100,14 +106,47 @@ app.post('/recommend', verifyFirebaseToken, async (req, res) => {
     const cleanText = text.replace(/```(json)?|```/g, '').trim();
     
     // Parse JSON
-    const movies = JSON.parse(cleanText);
+    let movies;
+    try {
+      movies = JSON.parse(cleanText);
+    } catch (parseError) {
+      console.error('JSON parse error:', parseError);
+      console.error('Response text:', cleanText);
+      throw new Error('Invalid response format from AI');
+    }
     
-    // Store user's search in database (optional enhancement)
+    // Validate and clean the response
+    if (!Array.isArray(movies)) {
+      throw new Error('Expected array of movies');
+    }
+    
+    // Ensure all required fields are present and properly formatted
+    movies = movies.map((movie, index) => {
+      if (!movie.title || !movie.year || !movie.reason) {
+        console.warn(`Movie ${index} missing required fields:`, movie);
+        return null;
+      }
+      
+      return {
+        title: String(movie.title).trim(),
+        year: String(movie.year).trim(),
+        genre: movie.genre ? String(movie.genre).trim() : 'Drama',
+        rating: movie.rating && movie.rating !== 'null' ? String(movie.rating).trim() : null,
+        reason: String(movie.reason).trim()
+      };
+    }).filter(movie => movie !== null); // Remove invalid entries
+    
+    if (movies.length === 0) {
+      throw new Error('No valid movies returned');
+    }
+    
+    // Store user's search in database with movie details (optional enhancement)
     if (req.user && firebaseInitialized) {
       try {
         await admin.firestore().collection('searches').add({
           userId: req.user.uid,
           mood: mood,
+          movies: movies,
           timestamp: admin.firestore.FieldValue.serverTimestamp()
         });
       } catch (dbError) {
@@ -119,7 +158,18 @@ app.post('/recommend', verifyFirebaseToken, async (req, res) => {
     return res.json(movies);
   } catch (error) {
     console.error('Error getting recommendations:', error);
-    return res.status(500).json({ error: 'Failed to get recommendations' });
+    
+    // Return a more specific error message
+    let errorMessage = 'Failed to get recommendations';
+    if (error.message.includes('Invalid response format')) {
+      errorMessage = 'AI returned invalid response format';
+    } else if (error.message.includes('No valid movies')) {
+      errorMessage = 'No valid movie recommendations could be generated';
+    } else if (error.message.includes('API')) {
+      errorMessage = 'AI service temporarily unavailable';
+    }
+    
+    return res.status(500).json({ error: errorMessage });
   }
 });
 
@@ -139,10 +189,12 @@ app.get('/api/history', verifyFirebaseToken, async (req, res) => {
     
     const searches = [];
     snapshot.forEach(doc => {
+      const data = doc.data();
       searches.push({
         id: doc.id,
-        ...doc.data(),
-        timestamp: doc.data().timestamp?.toDate()
+        mood: data.mood,
+        movies: data.movies || [], // Include movies array
+        timestamp: data.timestamp?.toDate() || new Date()
       });
     });
     
