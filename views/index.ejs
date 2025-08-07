@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mood2Movie - Find Movies Based on Your Mood</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Mood-to-Movie Recommender</h1>
+      <p class="subtitle">Tell us how you feel, we'll find the perfect movies for you</p>
+    </header>
+
+    <main>
+      <!-- Authentication Container -->
+      <div id="auth-container" class="auth-container">
+        <!-- User Profile (shown when logged in) -->
+        <div id="user-profile" class="user-profile" style="display: none;">
+          <img id="user-avatar" class="user-avatar" src="" alt="Profile">
+          <span id="user-name" class="user-name"></span>
+          <button id="logout-button" class="btn-logout">Sign Out</button>
+        </div>
+        
+        <!-- Login Buttons (shown when logged out) -->
+        <div id="login-buttons" class="auth-buttons">
+          <button id="login-google" class="btn-auth btn-google">
+            <i class="fab fa-google"></i> Sign in with Google
+          </button>
+          <button id="login-github" class="btn-auth btn-github">
+            <i class="fab fa-github"></i> Sign in with GitHub
+          </button>
+        </div>
+      </div>
+
+      <div class="input-container">
+        <input 
+          type="text" 
+          id="mood" 
+          placeholder="Describe your mood... (e.g., nostalgic and hopeful)"
+          autocomplete="off"
+        >
+        <button id="go">Get Movies</button>
+      </div>
+      
+      <div class="results-container">
+        <ul id="results"></ul>
+      </div>
+    </main>
+    
+    <footer>
+      <p>Powered by Gemini AI • Movie recommendations are AI-generated</p>
+    </footer>
+  </div>
+
+  <!-- Load Firebase config first -->
+  <script type="module" src="/js/firebase-config.js"></script>
+  <!-- Then load the main script -->
+  <script type="module" src="/js/script.js"></script>
+</body>
+</html>
