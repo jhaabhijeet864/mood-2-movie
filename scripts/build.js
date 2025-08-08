@@ -1,4 +1,4 @@
-// Build script for Firebase hosting - UPDATED
+// Build script for Firebase hosting - UPDATED FOR FIREBASE FUNCTIONS
 const fs = require('fs');
 const path = require('path');
 const ejs = require('ejs');
@@ -14,13 +14,13 @@ const html = ejs.render(template, {
   // You can pass any variables here if needed
 });
 
-// Update the HTML to work with static hosting
+// Update the HTML to work with Firebase Functions
 const staticHtml = html
   .replace(
     '<script type="module" src="/js/script.js"></script>',
     `<script>
-      // Set API endpoint for static hosting
-      window.API_BASE_URL = 'https://mood2movie-api.vercel.app'; // Will be updated after Vercel deployment
+      // Set API endpoint for Firebase Functions
+      window.API_BASE_URL = 'https://us-central1-movie-2-movie-4241d.cloudfunctions.net';
     </script>
     <script type="module" src="/js/script.js"></script>`
   )
@@ -38,6 +38,7 @@ fs.writeFileSync(outputPath, staticHtml);
 
 console.log('✅ Build completed! Static files ready for Firebase hosting.');
 console.log('📁 Generated:', outputPath);
+console.log('🔗 Functions URL: https://us-central1-movie-2-movie-4241d.cloudfunctions.net');
 
 // Verify the file was created
 if (fs.existsSync(outputPath)) {

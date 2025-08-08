@@ -53,3 +53,9 @@ Thumbs.db
 
 # Nested repositories
 /UI
+.vercel
+
+# Firebase Functions runtime config (contains secrets)
+.runtimeconfig.json
+functions/.runtimeconfig.json
+functions/.env

@@ -12,8 +12,8 @@ async function testApiKey() {
   try {
     console.log('Testing Gemini API key...');
     
-    // Create a model instance with the gemini-2.5-flash model
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+    // Create a model instance with the gemini-1.5-flash model
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
     
     // Generate a simple response to test the API key
     const prompt = 'Respond with "API key is working!" if you receive this message.';

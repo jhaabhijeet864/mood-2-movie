@@ -1,0 +1,22 @@
+{
+  "env": {
+    "es2021": true,
+    "node": true
+  },
+  "extends": ["eslint:recommended"],
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "script"
+  },
+  "rules": {
+    "max-len": "off",
+    "quotes": "off",
+    "object-curly-spacing": "off",
+    "comma-dangle": "off",
+    "indent": "off",
+    "no-trailing-spaces": "off",
+    "arrow-parens": "off",
+    "semi": ["error", "always"],
+    "no-unused-vars": ["warn", { "args": "none", "ignoreRestSiblings": true }]
+  }
+}

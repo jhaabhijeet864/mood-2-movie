@@ -86,19 +86,29 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       // Add user ID to the request if logged in
       const requestBody = { mood };
-      if (currentUser) {
-        requestBody.userId = currentUser.uid;
+      
+      // Use Firebase Function URL
+      const apiUrl = 'https://us-central1-movie-2-movie-4241d.cloudfunctions.net/recommend';
+      
+      // Prepare headers
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+      
+      // Add auth token if user is signed in
+      if (currentUser && window.firebase && firebase.auth) {
+        try {
+          const idToken = await firebase.auth().currentUser.getIdToken();
+          headers.Authorization = `Bearer ${idToken}`;
+        } catch (tokenError) {
+          console.warn('Could not get auth token:', tokenError);
+        }
       }
       
-      // Use API_BASE_URL if available (for static hosting) or default to relative path
-      const apiUrl = window.API_BASE_URL ? `${window.API_BASE_URL}/recommend` : '/recommend';
-      
-      // Send request to server
+      // Send request to Firebase Function
       const response = await fetch(apiUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: headers,
         body: JSON.stringify(requestBody)
       });
       
