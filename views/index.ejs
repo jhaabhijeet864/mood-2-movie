@@ -5,10 +5,96 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mood2Movie - Find Movies Based on Your Mood</title>
   <link rel="stylesheet" href="/css/style.css">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 </head>
 <body>
+  <!-- Floating background orbs -->
+  <div class="background-orb"></div>
+  <div class="background-orb"></div>
+  <div class="background-orb"></div>
+  
+  <!-- Sticky Navigation Bar -->
+  <nav id="navbar" class="navbar">
+    <div class="nav-container">
+      <!-- Logo Section -->
+      <div class="nav-logo">
+        <a href="/">
+          <i class="fas fa-film"></i>
+          <span class="gradient-text">Mood2Movie</span>
+        </a>
+      </div>
+
+      <!-- Navigation Links (hidden on mobile) -->
+      <div class="nav-links">
+        <a href="/" class="nav-link active">Home</a>
+        <a href="/about" class="nav-link">About</a>
+        <a href="/profile" class="nav-link">My Profile</a>
+      </div>
+
+      <!-- User Profile Section -->
+      <div id="nav-user" class="nav-user" style="display: none;">
+        <div class="user-avatar-nav" id="user-avatar-nav">
+          <img id="nav-user-avatar" src="/placeholder-avatar.png" alt="User Avatar" class="avatar-img">
+          <span class="user-name-nav" id="nav-user-name">Guest</span>
+          <i class="fas fa-chevron-down dropdown-icon"></i>
+        </div>
+
+        <!-- Dropdown Menu -->
+        <div id="nav-dropdown" class="nav-dropdown">
+          <div class="dropdown-header">
+            <img id="dropdown-avatar" src="/placeholder-avatar.png" alt="User Avatar" class="dropdown-avatar">
+            <div class="dropdown-user-info">
+              <strong id="dropdown-name">Abhijeet Jha</strong>
+              <span id="dropdown-email">jhaabhijeet694@gmail.com</span>
+            </div>
+          </div>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item">
+              <i class="fas fa-user"></i>
+              <span>Profile</span>
+            </li>
+            <li class="dropdown-item">
+              <i class="fas fa-history"></i>
+              <span>Search History</span>
+            </li>
+            <li class="dropdown-item">
+              <i class="fas fa-cog"></i>
+              <span>Settings</span>
+            </li>
+            <li class="dropdown-divider"></li>
+            <li class="dropdown-item logout" id="nav-logout">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Sign Out</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Login Button (shown when not logged in) -->
+      <div id="nav-login" class="nav-login">
+        <button class="btn-nav-login" id="nav-login-btn">
+          <i class="fas fa-sign-in-alt"></i>
+          <span>Sign In</span>
+        </button>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="mobile-menu-btn" id="mobile-menu-btn">
+        <i class="fas fa-bars"></i>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu">
+      <a href="/" class="mobile-nav-link">Home</a>
+      <a href="/about" class="mobile-nav-link">About</a>
+      <a href="/profile" class="mobile-nav-link">My Profile</a>
+    </div>
+  </nav>
+
   <div class="min-h-screen bg-slate-50">
     <div class="max-w-4xl mx-auto px-4 py-8">
       <!-- Hero Section -->

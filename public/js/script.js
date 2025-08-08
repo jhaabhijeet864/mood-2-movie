@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const moodInput = document.getElementById('mood');
   const moodForm = document.getElementById('mood-form');
   const submitButton = document.getElementById('go');
-  const btnText = submitButton.querySelector('.btn-text');
-  const loadingSpinner = submitButton.querySelector('.loading-spinner');
+  const btnText = submitButton?.querySelector('.btn-text');
+  const loadingSpinner = submitButton?.querySelector('.loading-spinner');
   const movieResults = document.getElementById('movie-results');
   
   // Auth elements
@@ -20,6 +20,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const logoutButton = document.getElementById('logout-button');
   const loginGoogleBtn = document.getElementById('login-google');
   const loginGithubBtn = document.getElementById('login-github');
+  
+  // Navigation elements
+  const navbar = document.getElementById('navbar');
+  const navUser = document.getElementById('nav-user');
+  const navLogin = document.getElementById('nav-login');
+  const userAvatarNav = document.getElementById('user-avatar-nav');
+  const navDropdown = document.getElementById('nav-dropdown');
+  const navLogout = document.getElementById('nav-logout');
+  const navLoginBtn = document.getElementById('nav-login-btn');
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
   
   // Layout elements
   const mainGrid = document.getElementById('main-grid');
@@ -47,9 +58,134 @@ document.addEventListener('DOMContentLoaded', () => {
   
   function init() {
     setupEventListeners();
+    setupNavigationEventListeners();
     initializeFirebase();
     setupMoodSuggestions();
+    setupScrollEffects();
     updateUIForSignedOutUser(); // Start with signed out state
+  }
+  
+  function setupNavigationEventListeners() {
+    // Dropdown toggle
+    if (userAvatarNav) {
+      userAvatarNav.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleDropdown();
+      });
+    }
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!navDropdown?.contains(e.target) && !userAvatarNav?.contains(e.target)) {
+        closeDropdown();
+      }
+    });
+    
+    // Navigation logout
+    if (navLogout) {
+      navLogout.addEventListener('click', handleLogout);
+    }
+    
+    // Navigation login
+    if (navLoginBtn) {
+      navLoginBtn.addEventListener('click', () => {
+        // Scroll to auth section or trigger login
+        const authSection = document.getElementById('auth-section');
+        if (authSection) {
+          authSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    }
+    
+    // Mobile menu toggle
+    if (mobileMenuBtn) {
+      mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+    }
+  }
+  
+  function toggleDropdown() {
+    if (navDropdown) {
+      const isOpen = navDropdown.classList.contains('show');
+      if (isOpen) {
+        closeDropdown();
+      } else {
+        openDropdown();
+      }
+    }
+  }
+  
+  function openDropdown() {
+    if (navDropdown && userAvatarNav) {
+      navDropdown.classList.add('show');
+      userAvatarNav.classList.add('active');
+    }
+  }
+  
+  function closeDropdown() {
+    if (navDropdown && userAvatarNav) {
+      navDropdown.classList.remove('show');
+      userAvatarNav.classList.remove('active');
+    }
+  }
+  
+  function toggleMobileMenu() {
+    if (mobileMenu) {
+      mobileMenu.classList.toggle('show');
+    }
+  }
+  
+  function setupScrollEffects() {
+    let lastScrollY = window.scrollY;
+    
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.scrollY;
+      
+      if (navbar) {
+        if (currentScrollY > 50) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+      }
+      
+      lastScrollY = currentScrollY;
+    });
+  }
+  
+  function updateNavigation(user) {
+    if (user) {
+      // Show user navigation
+      if (navUser) navUser.style.display = 'block';
+      if (navLogin) navLogin.style.display = 'none';
+      
+      // Update user info in navigation
+      const navUserAvatar = document.getElementById('nav-user-avatar');
+      const navUserName = document.getElementById('nav-user-name');
+      const dropdownAvatar = document.getElementById('dropdown-avatar');
+      const dropdownName = document.getElementById('dropdown-name');
+      const dropdownEmail = document.getElementById('dropdown-email');
+      
+      if (navUserAvatar) {
+        navUserAvatar.src = user.photoURL || '/placeholder-avatar.png';
+      }
+      if (navUserName) {
+        navUserName.textContent = user.displayName?.split(' ')[0] || 'User';
+      }
+      if (dropdownAvatar) {
+        dropdownAvatar.src = user.photoURL || '/placeholder-avatar.png';
+      }
+      if (dropdownName) {
+        dropdownName.textContent = user.displayName || 'User';
+      }
+      if (dropdownEmail) {
+        dropdownEmail.textContent = user.email || '';
+      }
+    } else {
+      // Show login navigation
+      if (navUser) navUser.style.display = 'none';
+      if (navLogin) navLogin.style.display = 'flex';
+      closeDropdown();
+    }
   }
   
   function setupEventListeners() {
@@ -519,6 +655,9 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateUIForSignedInUser(user) {
     currentUser = user;
     
+    // Update navigation
+    updateNavigation(user);
+    
     // Hide login card, show user profile card
     if (loginCard) loginCard.style.display = 'none';
     if (userProfileCard) {
@@ -554,6 +693,9 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateUIForSignedOutUser() {
     currentUser = null;
     searchHistory = [];
+    
+    // Update navigation
+    updateNavigation(null);
     
     // Show login card, hide user profile card
     if (loginCard) loginCard.style.display = 'block';

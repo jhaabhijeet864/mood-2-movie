@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - Mood2Movie</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+  <!-- Floating background orbs -->
+  <div class="background-orb"></div>
+  <div class="background-orb"></div>
+  <div class="background-orb"></div>
+  
+  <!-- Sticky Navigation Bar -->
+  <nav id="navbar" class="navbar">
+    <div class="nav-container">
+      <!-- Logo Section -->
+      <div class="nav-logo">
+        <a href="/">
+          <i class="fas fa-film"></i>
+          <span class="gradient-text">Mood2Movie</span>
+        </a>
+      </div>
+
+      <!-- Navigation Links (hidden on mobile) -->
+      <div class="nav-links">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/about" class="nav-link active">About</a>
+        <a href="/profile" class="nav-link">My Profile</a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <!-- User Menu (when authenticated) -->
+      <div class="user-menu" id="userMenu" style="display: none;">
+        <div class="user-avatar" id="userAvatar">
+          <img src="/placeholder-avatar.png" alt="User Avatar" id="userAvatarImg">
+        </div>
+        <div class="user-dropdown" id="userDropdown">
+          <div class="user-info">
+            <div class="user-name" id="userName">John Doe</div>
+            <div class="user-email" id="userEmail">john@example.com</div>
+          </div>
+          <div class="dropdown-divider"></div>
+          <a href="/profile" class="dropdown-item">
+            <i class="fas fa-user"></i> Profile
+          </a>
+          <a href="/settings" class="dropdown-item">
+            <i class="fas fa-cog"></i> Settings
+          </a>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </div>
+
+      <!-- Auth Buttons (when not authenticated) -->
+      <div class="auth-buttons" id="authButtons">
+        <button class="auth-btn login-btn" onclick="login()">
+          <i class="fab fa-google"></i> Sign In
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="/" class="mobile-nav-link">
+        <i class="fas fa-home"></i> Home
+      </a>
+      <a href="/about" class="mobile-nav-link active">
+        <i class="fas fa-info-circle"></i> About
+      </a>
+      <a href="/profile" class="mobile-nav-link">
+        <i class="fas fa-user"></i> My Profile
+      </a>
+      <div class="mobile-divider"></div>
+      <div class="mobile-auth" id="mobileAuth">
+        <button class="mobile-auth-btn" onclick="login()">
+          <i class="fab fa-google"></i> Sign In with Google
+        </button>
+        <button class="mobile-auth-btn github-btn" onclick="loginWithGitHub()">
+          <i class="fab fa-github"></i> Sign In with GitHub
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+      <!-- About Hero Section -->
+      <section class="about-hero">
+        <div class="about-hero-content">
+          <h1 class="about-title">
+            <span class="gradient-text">About Mood2Movie</span>
+          </h1>
+          <p class="about-subtitle">
+            Discover the perfect movie for your current emotional state
+          </p>
+        </div>
+      </section>
+
+      <!-- About Content -->
+      <section class="about-content">
+        <div class="about-grid">
+          <!-- What We Do -->
+          <div class="about-card">
+            <div class="about-card-icon">
+              <i class="fas fa-magic"></i>
+            </div>
+            <h3>AI-Powered Recommendations</h3>
+            <p>
+              Our intelligent system analyzes your mood description and matches it with the perfect movies from our extensive database. Using advanced AI technology, we understand the emotional nuances of your current state.
+            </p>
+          </div>
+
+          <!-- How It Works -->
+          <div class="about-card">
+            <div class="about-card-icon">
+              <i class="fas fa-brain"></i>
+            </div>
+            <h3>Smart Mood Analysis</h3>
+            <p>
+              Simply describe how you're feeling in your own words. Our system processes natural language to understand emotions, energy levels, and preferences, then curates a personalized list of movies that match your vibe.
+            </p>
+          </div>
+
+          <!-- Why Choose Us -->
+          <div class="about-card">
+            <div class="about-card-icon">
+              <i class="fas fa-heart"></i>
+            </div>
+            <h3>Personalized Experience</h3>
+            <p>
+              Every recommendation is tailored to you. Whether you're feeling adventurous, contemplative, happy, or need a good cry, we'll find movies that resonate with your emotional journey.
+            </p>
+          </div>
+
+          <!-- Technology -->
+          <div class="about-card">
+            <div class="about-card-icon">
+              <i class="fas fa-robot"></i>
+            </div>
+            <h3>Cutting-Edge Technology</h3>
+            <p>
+              Powered by Google's Gemini AI, our platform leverages state-of-the-art natural language processing to provide accurate, contextual movie recommendations based on emotional intelligence.
+            </p>
+          </div>
+
+          <!-- Privacy -->
+          <div class="about-card">
+            <div class="about-card-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3>Privacy Focused</h3>
+            <p>
+              Your mood data and preferences are handled securely. We believe in transparent AI that respects your privacy while delivering exceptional personalized experiences.
+            </p>
+          </div>
+
+          <!-- Community -->
+          <div class="about-card">
+            <div class="about-card-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <h3>Growing Community</h3>
+            <p>
+              Join thousands of movie lovers who've discovered their new favorite films through mood-based recommendations. Share your discoveries and connect with like-minded viewers.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mission Statement -->
+      <section class="mission-section">
+        <div class="mission-content">
+          <h2 class="mission-title">Our Mission</h2>
+          <p class="mission-text">
+            At Mood2Movie, we believe that the right movie at the right moment can transform your day, lift your spirits, or provide the perfect emotional escape. Our mission is to bridge the gap between how you feel and what you watch, making movie discovery an intuitive, personalized experience.
+          </p>
+          <p class="mission-text">
+            We're not just recommending movies; we're curating emotional experiences that resonate with your current state of mind, helping you find exactly what your soul needs in this moment.
+          </p>
+        </div>
+      </section>
+
+      <!-- Get Started CTA -->
+      <section class="cta-section">
+        <div class="cta-content">
+          <h3 class="cta-title">Ready to Find Your Perfect Movie?</h3>
+          <p class="cta-subtitle">Tell us how you're feeling and discover your next favorite film</p>
+          <a href="/" class="cta-button">
+            <i class="fas fa-film"></i>
+            Start Movie Discovery
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2024 Mood2Movie. Made with <i class="fas fa-heart text-red-500"></i> for movie lovers everywhere.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/script.js"></script>
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>

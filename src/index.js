@@ -98,6 +98,14 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
+app.get('/about', (req, res) => {
+  res.render('about');
+});
+
+app.get('/profile', (req, res) => {
+  res.render('profile');
+});
+
 app.post('/recommend', verifyFirebaseToken, async (req, res) => {
   const mood = req.body.mood?.trim();
   
@@ -234,3 +242,5 @@ app.get('/api/history', verifyFirebaseToken, async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+

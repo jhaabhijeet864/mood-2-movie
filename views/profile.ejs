@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - Mood2Movie</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+  <!-- Floating background orbs -->
+  <div class="background-orb"></div>
+  <div class="background-orb"></div>
+  <div class="background-orb"></div>
+  
+  <!-- Sticky Navigation Bar -->
+  <nav id="navbar" class="navbar">
+    <div class="nav-container">
+      <!-- Logo Section -->
+      <div class="nav-logo">
+        <a href="/">
+          <i class="fas fa-film"></i>
+          <span class="gradient-text">Mood2Movie</span>
+        </a>
+      </div>
+
+      <!-- Navigation Links (hidden on mobile) -->
+      <div class="nav-links">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/about" class="nav-link">About</a>
+        <a href="/profile" class="nav-link active">My Profile</a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <!-- User Menu (when authenticated) -->
+      <div class="user-menu" id="userMenu" style="display: none;">
+        <div class="user-avatar" id="userAvatar">
+          <img src="/placeholder-avatar.png" alt="User Avatar" id="userAvatarImg">
+        </div>
+        <div class="user-dropdown" id="userDropdown">
+          <div class="user-info">
+            <div class="user-name" id="userName">John Doe</div>
+            <div class="user-email" id="userEmail">john@example.com</div>
+          </div>
+          <div class="dropdown-divider"></div>
+          <a href="/profile" class="dropdown-item">
+            <i class="fas fa-user"></i> Profile
+          </a>
+          <a href="/settings" class="dropdown-item">
+            <i class="fas fa-cog"></i> Settings
+          </a>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </div>
+
+      <!-- Auth Buttons (when not authenticated) -->
+      <div class="auth-buttons" id="authButtons">
+        <button class="auth-btn login-btn" onclick="login()">
+          <i class="fab fa-google"></i> Sign In
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="/" class="mobile-nav-link">
+        <i class="fas fa-home"></i> Home
+      </a>
+      <a href="/about" class="mobile-nav-link">
+        <i class="fas fa-info-circle"></i> About
+      </a>
+      <a href="/profile" class="mobile-nav-link active">
+        <i class="fas fa-user"></i> My Profile
+      </a>
+      <div class="mobile-divider"></div>
+      <div class="mobile-auth" id="mobileAuth">
+        <button class="mobile-auth-btn" onclick="login()">
+          <i class="fab fa-google"></i> Sign In with Google
+        </button>
+        <button class="mobile-auth-btn github-btn" onclick="loginWithGitHub()">
+          <i class="fab fa-github"></i> Sign In with GitHub
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+      <!-- Profile Hero Section -->
+      <section class="profile-hero">
+        <div class="profile-hero-content">
+          <div class="profile-avatar-large">
+            <img src="/placeholder-avatar.png" alt="Profile Avatar" id="profileAvatarImg">
+            <button class="avatar-edit-btn" onclick="editAvatar()">
+              <i class="fas fa-camera"></i>
+            </button>
+          </div>
+          <h1 class="profile-title">
+            <span class="gradient-text" id="profileName">Welcome Back!</span>
+          </h1>
+          <p class="profile-subtitle" id="profileEmail">Sign in to personalize your experience</p>
+        </div>
+      </section>
+
+      <!-- Profile Content -->
+      <div class="profile-content">
+        <!-- Sign In Prompt (shown when not authenticated) -->
+        <section class="signin-prompt" id="signinPrompt">
+          <div class="signin-card">
+            <div class="signin-icon">
+              <i class="fas fa-user-circle"></i>
+            </div>
+            <h3>Sign In to Access Your Profile</h3>
+            <p>Create an account or sign in to save your movie preferences, track your mood history, and get personalized recommendations.</p>
+            <div class="signin-buttons">
+              <button class="signin-btn google-btn" onclick="login()">
+                <i class="fab fa-google"></i>
+                Continue with Google
+              </button>
+              <button class="signin-btn github-btn" onclick="loginWithGitHub()">
+                <i class="fab fa-github"></i>
+                Continue with GitHub
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Profile Dashboard (shown when authenticated) -->
+        <section class="profile-dashboard" id="profileDashboard" style="display: none;">
+          <div class="dashboard-grid">
+            <!-- Profile Information -->
+            <div class="dashboard-card">
+              <div class="card-header">
+                <h3><i class="fas fa-user"></i> Profile Information</h3>
+                <button class="edit-btn" onclick="editProfile()">
+                  <i class="fas fa-edit"></i> Edit
+                </button>
+              </div>
+              <div class="profile-info">
+                <div class="info-item">
+                  <label>Display Name</label>
+                  <span id="displayName">Loading...</span>
+                </div>
+                <div class="info-item">
+                  <label>Email Address</label>
+                  <span id="emailAddress">Loading...</span>
+                </div>
+                <div class="info-item">
+                  <label>Member Since</label>
+                  <span id="memberSince">Loading...</span>
+                </div>
+                <div class="info-item">
+                  <label>Account Provider</label>
+                  <span id="accountProvider">Loading...</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mood History -->
+            <div class="dashboard-card">
+              <div class="card-header">
+                <h3><i class="fas fa-history"></i> Recent Mood Searches</h3>
+                <button class="clear-btn" onclick="clearMoodHistory()">
+                  <i class="fas fa-trash"></i> Clear
+                </button>
+              </div>
+              <div class="mood-history" id="moodHistory">
+                <div class="history-item">
+                  <div class="mood-text">"Feeling excited and ready for adventure"</div>
+                  <div class="mood-date">2 hours ago</div>
+                </div>
+                <div class="history-item">
+                  <div class="mood-text">"Need something calming and peaceful"</div>
+                  <div class="mood-date">1 day ago</div>
+                </div>
+                <div class="history-item">
+                  <div class="mood-text">"Looking for a good laugh"</div>
+                  <div class="mood-date">3 days ago</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Favorite Movies -->
+            <div class="dashboard-card">
+              <div class="card-header">
+                <h3><i class="fas fa-heart"></i> Favorite Movies</h3>
+                <span class="count" id="favoritesCount">0 movies</span>
+              </div>
+              <div class="favorites-grid" id="favoritesGrid">
+                <div class="empty-state">
+                  <i class="fas fa-heart"></i>
+                  <p>No favorite movies yet</p>
+                  <span>Start discovering movies to add your favorites!</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Preferences -->
+            <div class="dashboard-card">
+              <div class="card-header">
+                <h3><i class="fas fa-cog"></i> Preferences</h3>
+              </div>
+              <div class="preferences-list">
+                <div class="preference-item">
+                  <label>
+                    <input type="checkbox" id="prefEmailNotifications" checked>
+                    <span class="checkmark"></span>
+                    Email notifications for new features
+                  </label>
+                </div>
+                <div class="preference-item">
+                  <label>
+                    <input type="checkbox" id="prefSaveHistory" checked>
+                    <span class="checkmark"></span>
+                    Save mood search history
+                  </label>
+                </div>
+                <div class="preference-item">
+                  <label>
+                    <input type="checkbox" id="prefAdultContent">
+                    <span class="checkmark"></span>
+                    Include adult content in recommendations
+                  </label>
+                </div>
+                <div class="preference-item">
+                  <label for="prefLanguage">Preferred Language</label>
+                  <select id="prefLanguage" class="pref-select">
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                    <option value="it">Italian</option>
+                  </select>
+                </div>
+              </div>
+              <button class="save-preferences-btn" onclick="savePreferences()">
+                <i class="fas fa-save"></i>
+                Save Preferences
+              </button>
+            </div>
+
+            <!-- Account Actions -->
+            <div class="dashboard-card">
+              <div class="card-header">
+                <h3><i class="fas fa-shield-alt"></i> Account & Privacy</h3>
+              </div>
+              <div class="account-actions">
+                <button class="action-btn" onclick="downloadData()">
+                  <i class="fas fa-download"></i>
+                  Download My Data
+                </button>
+                <button class="action-btn warning" onclick="clearAllData()">
+                  <i class="fas fa-trash"></i>
+                  Clear All Data
+                </button>
+                <button class="action-btn danger" onclick="deleteAccount()">
+                  <i class="fas fa-user-times"></i>
+                  Delete Account
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2024 Mood2Movie. Made with <i class="fas fa-heart text-red-500"></i> for movie lovers everywhere.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/script.js"></script>
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+    
+    // Profile page specific functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check authentication state
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          showProfileDashboard(user);
+        } else {
+          showSigninPrompt();
+        }
+      });
+    });
+
+    function showProfileDashboard(user) {
+      document.getElementById('signinPrompt').style.display = 'none';
+      document.getElementById('profileDashboard').style.display = 'block';
+      
+      // Update profile information
+      document.getElementById('profileName').textContent = user.displayName || 'Anonymous User';
+      document.getElementById('profileEmail').textContent = user.email;
+      document.getElementById('profileAvatarImg').src = user.photoURL || '/placeholder-avatar.png';
+      
+      // Update dashboard details
+      document.getElementById('displayName').textContent = user.displayName || 'Not set';
+      document.getElementById('emailAddress').textContent = user.email;
+      document.getElementById('memberSince').textContent = new Date(user.metadata.creationTime).toLocaleDateString();
+      document.getElementById('accountProvider').textContent = user.providerData[0]?.providerId || 'Unknown';
+    }
+
+    function showSigninPrompt() {
+      document.getElementById('signinPrompt').style.display = 'block';
+      document.getElementById('profileDashboard').style.display = 'none';
+    }
+
+    function editAvatar() {
+      alert('Avatar editing coming soon!');
+    }
+
+    function editProfile() {
+      alert('Profile editing coming soon!');
+    }
+
+    function clearMoodHistory() {
+      if (confirm('Are you sure you want to clear your mood search history?')) {
+        localStorage.removeItem('moodHistory');
+        document.getElementById('moodHistory').innerHTML = '<div class="empty-state"><i class="fas fa-history"></i><p>No mood history</p></div>';
+      }
+    }
+
+    function savePreferences() {
+      // Save preferences logic here
+      alert('Preferences saved successfully!');
+    }
+
+    function downloadData() {
+      alert('Data download feature coming soon!');
+    }
+
+    function clearAllData() {
+      if (confirm('Are you sure you want to clear all your data? This action cannot be undone.')) {
+        localStorage.clear();
+        alert('All data cleared successfully!');
+      }
+    }
+
+    function deleteAccount() {
+      if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+        const user = firebase.auth().currentUser;
+        if (user) {
+          user.delete().then(() => {
+            alert('Account deleted successfully!');
+            window.location.href = '/';
+          }).catch((error) => {
+            alert('Error deleting account: ' + error.message);
+          });
+        }
+      }
+    }
+  </script>
+</body>
+</html>
