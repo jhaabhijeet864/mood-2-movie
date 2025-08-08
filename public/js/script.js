@@ -39,6 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
     uid: "mock-user-123"
   };
   
+  // Update the API endpoints to use Vercel
+  const API_BASE_URL = 'https://mood-2-movie-804l5uzye-abhijeet-jhas-projects.vercel.app';
+  
   // Initialize the app
   init();
   
@@ -87,8 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // Add user ID to the request if logged in
       const requestBody = { mood };
       
-      // Use Firebase Function URL
-      const apiUrl = 'https://us-central1-movie-2-movie-4241d.cloudfunctions.net/recommend';
+      // Use VERCEL backend URL instead of Firebase Functions
+      const apiUrl = `${API_BASE_URL}/recommend`;
       
       // Prepare headers
       const headers = {
@@ -105,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
       
-      // Send request to Firebase Function
+      // Send request to Vercel backend
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: headers,
@@ -571,6 +574,66 @@ document.addEventListener('DOMContentLoaded', () => {
           </p>
         </div>
       `;
+    }
+  }
+  
+  // Update the recommendation function
+  async function getRecommendations(mood) {
+    try {
+      showLoading(true);
+      
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+      
+      // Add auth token if user is signed in
+      if (currentUser) {
+        const token = await currentUser.getIdToken();
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
+      const response = await fetch(`${API_BASE_URL}/recommend`, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify({ mood })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const movies = await response.json();
+      displayRecommendations(movies);
+      
+    } catch (error) {
+      console.error('Error:', error);
+      showError('Failed to get recommendations. Please try again.');
+    } finally {
+      showLoading(false);
+    }
+  }
+  
+  // Update the history function
+  async function loadSearchHistory() {
+    if (!currentUser) return;
+    
+    try {
+      const token = await currentUser.getIdToken();
+      const response = await fetch(`${API_BASE_URL}/history`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const searches = await response.json();
+      displaySearchHistory(searches);
+      
+    } catch (error) {
+      console.error('Error loading history:', error);
     }
   }
 });

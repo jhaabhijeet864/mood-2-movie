@@ -14,13 +14,13 @@ const html = ejs.render(template, {
   // You can pass any variables here if needed
 });
 
-// Update the HTML to work with Firebase Functions
+// Update the HTML to work with Vercel backend
 const staticHtml = html
   .replace(
     '<script type="module" src="/js/script.js"></script>',
     `<script>
-      // Set API endpoint for Firebase Functions
-      window.API_BASE_URL = 'https://us-central1-movie-2-movie-4241d.cloudfunctions.net';
+      // Set API endpoint for Vercel backend
+      window.API_BASE_URL = 'https://mood-2-movie-804l5uzye-abhijeet-jhas-projects.vercel.app';
     </script>
     <script type="module" src="/js/script.js"></script>`
   )
